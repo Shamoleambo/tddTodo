@@ -21,4 +21,10 @@ public class TodoService {
 	public Todo addTodo(Todo todo) {
 		return this.todoRepository.save(todo);
 	}
+
+	public void completeTodo(Long id) {
+		Todo todo = this.todoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Todo not found"));
+		todo.setCompleted(true);
+		this.todoRepository.save(todo);
+	}
 }
