@@ -40,4 +40,16 @@ public class TodoServiceTest {
 		assertEquals("title", todos.get(0).getTitle());
 	}
 
+	@Test
+	void testAddTodo() {
+		Todo todo = new Todo();
+		todo.setTitle("title");
+		todo.setCompleted(false);
+
+		when(this.todoRepository.save(todo)).thenReturn(todo);
+
+		Todo createdTodo = this.todoService.addTodo(todo);
+		assertEquals(todo, createdTodo);
+	}
+
 }
