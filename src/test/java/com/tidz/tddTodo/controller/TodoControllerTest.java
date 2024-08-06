@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,21 +21,26 @@ import com.tidz.tddTodo.service.TodoService;
 @WebMvcTest(TodoController.class)
 public class TodoControllerTest {
 
+	private static Todo todo = new Todo();
+
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	private TodoService todoService;
 
-	@Test
-	void testGetTodos() throws Exception {
-		Todo todo = new Todo();
+	@BeforeAll
+	static void setUpTodo() {
 		todo.setTitle("title");
 		todo.setCompleted(false);
+	}
 
+	@Test
+	void testGetTodos() throws Exception {
 		when(this.todoService.getAllTodos()).thenReturn(List.of(todo));
 
 		this.mockMvc.perform(get("/todos").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().json("[{'title': 'title', 'completed': false}]"));
 	}
+
 }
